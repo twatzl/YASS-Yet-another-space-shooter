@@ -1,11 +1,11 @@
 package renderService
 
-var audioService RenderService = nil
+var renderService RenderService = nil
 
 func ProvideRenderService(service RenderService) {
-	audioService = service
+	renderService = service
 }
 
 func Get() RenderService {
-	return audioService
+	return renderService
 }

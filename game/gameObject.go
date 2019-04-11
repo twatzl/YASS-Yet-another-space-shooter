@@ -1,6 +1,9 @@
 package game
 
-import "github.com/twatzl/pixel-test/services/renderService"
+import (
+	"github.com/twatzl/pixel-test/components"
+	"github.com/twatzl/pixel-test/services/renderService"
+)
 
 type GameObject interface {
 	Enable()
@@ -11,18 +14,15 @@ type GameObject interface {
 }
 
 type GameObjectBase struct {
-	game       *game
 	components []Component
 	children   []GameObject
 	renderer   Renderer
-	transform  Transform
+	transform  components.Transform
 }
 
-func InitGameObjectBase(renderer Renderer) *GameObjectBase {
-	gob := &GameObjectBase{}
-	gob.renderer = renderer
-	gob.transform = NewTransform()
-	return gob
+func (g *GameObjectBase) InitBase(renderer Renderer) {
+	g.renderer = renderer
+	g.transform = components.NewTransform()
 }
 
 func (g *GameObjectBase) Render() {
@@ -55,7 +55,7 @@ func (g *GameObjectBase) renderChildren() {
 	}
 }
 
-func (g *GameObjectBase) GetTransform() Transform {
+func (g *GameObjectBase) GetTransform() components.Transform {
 	return g.transform
 }
 

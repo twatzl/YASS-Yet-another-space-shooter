@@ -25,6 +25,7 @@ func (s *mainScene) Render() {
 func InitMainScene() *mainScene {
 	ms := &mainScene{}
 
+	ms.AddGameObject(gameObjects.CreateBackground())
 	ms.AddGameObject(gameObjects.CreateShip())
 
 	return ms

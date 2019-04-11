@@ -7,6 +7,7 @@ import (
 	"github.com/twatzl/pixel-test/scenes"
 	"github.com/twatzl/pixel-test/services/renderService"
 	"github.com/twatzl/pixel-test/services/windowService"
+	"github.com/twatzl/pixel-test/systems/physicsSystem"
 	_ "image/png"
 	"log"
 	"os"
@@ -40,6 +41,12 @@ func run() {
 	renderService.ProvideRenderService(rService)
 	renderService.Get().GetContext().SetViewMatrix(lookAt(pixel.V(0,0), 0))
 
+	ps := physicsSystem.NewPhysicsSystem(physicsSystem.PhysicsConfig{
+		Gravity: 9.81,
+		GravityDirection: pixel.V(0, -1),
+	})
+	physicsSystem.Provide(ps)
+
 	mainScene := scenes.InitMainScene()
 	g := game.InitGame(mainScene)
 
@@ -54,6 +61,8 @@ func run() {
 		lastTime = time.Now()
 
 		g.HandleInput(deltaT)
+
+		physicsSystem.GetControl().Update(deltaT)
 
 		win.Clear(bgcolor)
 		g.Render()

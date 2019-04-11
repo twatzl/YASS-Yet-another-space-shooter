@@ -2,11 +2,13 @@ package gameObjects
 
 import (
 	"github.com/twatzl/pixel-test/game"
+	"github.com/twatzl/pixel-test/systems/physicsSystem"
 	"github.com/twatzl/pixel-test/util"
 )
 
 type ship struct {
-	b *game.GameObjectBase
+	game.GameObjectBase
+	*physicsSystem.PhysicComponent
 }
 
 func (ship) Destroy() {
@@ -21,10 +23,6 @@ func (ship) Enable() {
 
 }
 
-func (s *ship) Render() {
-	s.b.Render()
-}
-
 func (ship) Update() {
 
 }
@@ -34,7 +32,10 @@ func CreateShip() *ship {
 
 	sprite := util.LoadSprite("sprites/shuttle.png")
 	renderer := game.CreateSpriteRenderer(sprite)
-	s.b = game.InitGameObjectBase(renderer)
+	s.InitBase(renderer)
+	s.PhysicComponent = physicsSystem.NewPhysicComponent(2000)
+
+	physicsSystem.Get().RegisterPhysicComponent(s.PhysicComponent, s.GetTransform())
 
 	return s
 }

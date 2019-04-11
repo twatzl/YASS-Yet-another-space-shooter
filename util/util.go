@@ -3,6 +3,7 @@ package util
 import (
 	"github.com/faiface/pixel"
 	"image"
+	_ "image/jpeg"
 	"math"
 	"os"
 )
