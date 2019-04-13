@@ -8,6 +8,7 @@ import (
 type Transform interface {
 	GetTranslation() pixel.Vec
 	GetRotation() float64
+	GetRotationVec() pixel.Vec
 	GetScale() pixel.Vec
 	GetLocalMatrix() pixel.Matrix
 
@@ -28,8 +29,8 @@ var _ Transform = &transformImpl{}
 
 func NewTransform() Transform {
 	return &transformImpl{
-		scale: pixel.V(1,1),
-		rotation: 0,
+		scale:       pixel.V(1, 1),
+		rotation:    0,
 		translation: pixel.ZV,
 		localMatrix: pixel.IM,
 	}
@@ -41,6 +42,14 @@ func (t *transformImpl) GetTranslation() pixel.Vec {
 
 func (t *transformImpl) GetRotation() float64 {
 	return t.rotation
+}
+
+func (t *transformImpl) GetRotationVec() pixel.Vec {
+	angle := t.rotation
+	x := -math.Sin(angle)
+	y := math.Cos(angle)
+	// fmt.Printf("rot: %f ,x: %f ,y: %f\n", angle, x, y)
+	return pixel.V(x, y)
 }
 
 func (t *transformImpl) GetScale() pixel.Vec {
@@ -56,7 +65,7 @@ func (t *transformImpl) updateTransform() {
 }
 
 func (t *transformImpl) Rotate(angle float64) {
-	angle = angle/360 * 2 * math.Pi
+	angle = angle / 360 * 2 * math.Pi
 	t.rotation += angle
 	t.updateTransform()
 }

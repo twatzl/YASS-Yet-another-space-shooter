@@ -1,6 +1,7 @@
 package physicsSystem
 
 import (
+	"github.com/faiface/pixel"
 	"github.com/twatzl/pixel-test/components"
 	"github.com/twatzl/pixel-test/services/simulationService"
 )
@@ -49,3 +50,15 @@ func (ps *physicSystemImpl) updateMovement(deltaT float64, pair physicTransformP
 }
 
 var _ PhysicsSystemControl = &physicSystemImpl{}
+
+func ApplyForce(c *PhysicComponent, force pixel.Vec) {
+	if (c.mass == 0) {
+		return;
+	}
+
+	deltaT := simulationService.Get().GetElapsedTime().Seconds()
+	/* speed += F/m * deltaT */
+	acc := force.Scaled(1 / c.mass)
+	deltaV := acc.Scaled(deltaT)
+	c.speed = c.speed.Add(deltaV)
+}

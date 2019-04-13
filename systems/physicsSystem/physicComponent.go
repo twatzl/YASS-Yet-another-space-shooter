@@ -12,5 +12,6 @@ type PhysicComponent struct {
 func NewPhysicComponent(mass float64) *PhysicComponent {
 	return &PhysicComponent{
 		speed: pixel.ZV,
+		mass:  mass,
 	}
 }

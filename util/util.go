@@ -31,11 +31,11 @@ func LoadSprite(path string) *pixel.Sprite {
 }
 
 func Deg2Rad(angle float64) float64 {
-	angle = angle/360 * 2 * math.Pi
+	angle = angle / 360 * 2 * math.Pi
 	return angle
 }
 
 func Rad2Deg(angle float64) float64 {
-	angle = angle/(2 * math.Pi) * 360
+	angle = angle / (2 * math.Pi) * 360
 	return angle
 }
