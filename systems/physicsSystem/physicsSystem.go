@@ -15,10 +15,10 @@ type PhysicsSystem interface {
  */
 type PhysicsSystemControl interface {
 	PhysicsSystem
-	Update(deltaT float64)
+	Update()
 }
 
 type PhysicsConfig struct {
-	Gravity float64
+	Gravity          float64
 	GravityDirection pixel.Vec
 }

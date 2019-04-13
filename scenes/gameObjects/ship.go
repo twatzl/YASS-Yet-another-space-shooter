@@ -1,7 +1,10 @@
 package gameObjects
 
 import (
+	"github.com/faiface/pixel/pixelgl"
 	"github.com/twatzl/pixel-test/game"
+	"github.com/twatzl/pixel-test/services/simulationService"
+	"github.com/twatzl/pixel-test/systems/inputSystem"
 	"github.com/twatzl/pixel-test/systems/physicsSystem"
 	"github.com/twatzl/pixel-test/util"
 )
@@ -36,6 +39,19 @@ func CreateShip() *ship {
 	s.PhysicComponent = physicsSystem.NewPhysicComponent(2000)
 
 	physicsSystem.Get().RegisterPhysicComponent(s.PhysicComponent, s.GetTransform())
+
+	rotSpeed := 120.0
+	inputSystem.Get().RegisterKeyEventHandler(inputSystem.KeyPressed, pixelgl.KeyLeft, func() {
+		deltaT := simulationService.Get().GetElapsedTime().Seconds()
+		s.GetTransform().Rotate(rotSpeed * deltaT)
+
+	})
+
+	inputSystem.Get().RegisterKeyEventHandler(inputSystem.KeyPressed, pixelgl.KeyRight, func() {
+		deltaT := simulationService.Get().GetElapsedTime().Seconds()
+		s.GetTransform().Rotate(-rotSpeed * deltaT)
+
+	})
 
 	return s
 }

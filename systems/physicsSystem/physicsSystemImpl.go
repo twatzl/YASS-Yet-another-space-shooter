@@ -1,32 +1,36 @@
 package physicsSystem
 
-import "github.com/twatzl/pixel-test/components"
+import (
+	"github.com/twatzl/pixel-test/components"
+	"github.com/twatzl/pixel-test/services/simulationService"
+)
 
 type physicSystemImpl struct {
-	config PhysicsConfig
+	config           PhysicsConfig
 	physicComponents []physicTransformPair
 }
 
 type physicTransformPair struct {
-	physic *PhysicComponent
+	physic    *PhysicComponent
 	transform components.Transform
 }
 
 func NewPhysicsSystem(config PhysicsConfig) PhysicsSystemControl {
 	return &physicSystemImpl{
-		config: config,
+		config:           config,
 		physicComponents: []physicTransformPair{},
 	}
 }
 
 func (ps *physicSystemImpl) RegisterPhysicComponent(c *PhysicComponent, t components.Transform) {
 	ps.physicComponents = append(ps.physicComponents, physicTransformPair{
-		physic: c,
+		physic:    c,
 		transform: t,
 	})
 }
 
-func (ps *physicSystemImpl) Update(deltaT float64) {
+func (ps *physicSystemImpl) Update() {
+	deltaT := simulationService.Get().GetElapsedTime().Seconds()
 	for _, c := range ps.physicComponents {
 		ps.handleGravity(deltaT, c.physic)
 		ps.updateMovement(deltaT, c)
@@ -38,7 +42,6 @@ func (ps *physicSystemImpl) handleGravity(deltaT float64, c *PhysicComponent) {
 	deltaV = deltaV.Scaled(deltaT)
 	c.speed = c.speed.Add(deltaV)
 }
-
 
 func (ps *physicSystemImpl) updateMovement(deltaT float64, pair physicTransformPair) {
 	dist := pair.physic.speed.Scaled(deltaT)
