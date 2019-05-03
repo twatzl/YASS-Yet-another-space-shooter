@@ -1,5 +1,5 @@
 package game
 
-type Renderer interface {
+type Renderable interface {
 	Render()
 }

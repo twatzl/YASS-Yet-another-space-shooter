@@ -1,8 +1,6 @@
 package main
 
 import (
-	"github.com/faiface/beep"
-	"github.com/faiface/beep/speaker"
 	"github.com/twatzl/pixel-test/game"
 	"github.com/twatzl/pixel-test/scenes"
 	"github.com/twatzl/pixel-test/services/renderService"
@@ -11,21 +9,14 @@ import (
 	"github.com/twatzl/pixel-test/systems/inputSystem"
 	"github.com/twatzl/pixel-test/systems/physicsSystem"
 	_ "image/png"
-	"log"
-	"os"
 	"time"
 
-	"github.com/faiface/beep/wav"
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
 	"golang.org/x/image/colornames"
-
-	"github.com/twatzl/pixel-test/sg"
 )
 
-var streamer beep.StreamSeekCloser = nil
 var bgcolor = colornames.Skyblue
-var spaceshipTransform *sg.TransformNode = nil
 
 func main() {
 	pixelgl.Run(run)
@@ -34,10 +25,9 @@ func main() {
 func run() {
 	win := initServicesAndSystems()
 
-	mainScene := scenes.InitMainScene()
+	mainScene := scenes.InitMainScene(win.Bounds())
 	g := game.InitGame(mainScene)
 
-	loadSounds()
 	lastTime := time.Now()
 	deltaT := time.Since(lastTime)
 
@@ -54,7 +44,9 @@ func run() {
 
 		/* render */
 		win.Clear(bgcolor)
+
 		g.Render()
+
 		win.Update()
 	}
 }
@@ -67,9 +59,8 @@ func initServicesAndSystems() *pixelgl.Window {
 	})
 	win := windowService.Get().GetWindow()
 
-	rService := renderService.NewSimpleRenderService(win)
+	rService := renderService.NewSimpleRenderService(win, win.Bounds())
 	renderService.ProvideRenderService(rService)
-	renderService.Get().GetContext().SetViewMatrix(lookAt(pixel.V(0, 0), 0))
 
 	sService := simulationService.New()
 	simulationService.Provide(sService)
@@ -85,6 +76,8 @@ func initServicesAndSystems() *pixelgl.Window {
 	return win
 }
 
+
+/*
 func loadSounds() {
 	f, err := os.Open("sound/laser_shooting_sfx.wav")
 	if err != nil {
@@ -113,7 +106,7 @@ func handleInput(win *pixelgl.Window, deltaTime float64) {
 		spaceshipTransform.Rotate(-rotSpeed * deltaTime)
 	}
 
-}
+}*/
 
 func bgcolorBlink() {
 	blinkdur := 50 * time.Millisecond
@@ -130,15 +123,4 @@ func bgcolorBlink() {
 	bgcolor = colornames.Skyblue
 	time.Sleep(blinkdur)
 
-}
-
-func lookAt(pos pixel.Vec, rot float64) pixel.Matrix {
-	center := windowService.Get().GetWindow().Bounds().Center()
-	offset := center.Scaled(-1)
-	offset = offset.Add(pos)
-	return calculateViewMatrix(center, 0)
-}
-
-func calculateViewMatrix(translation pixel.Vec, rotation float64) pixel.Matrix {
-	return pixel.IM.Rotated(pixel.ZV, rotation).Moved(translation)
 }

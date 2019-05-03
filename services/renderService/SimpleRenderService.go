@@ -2,23 +2,30 @@ package renderService
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
 )
 
 type simpleRenderService struct {
-	 ctx *renderContextImpl
+	 ctx RenderContext
 }
 
 func (s *simpleRenderService) GetContext() RenderContext {
 	return s.ctx
 }
 
-func NewSimpleRenderService(win *pixelgl.Window) RenderService {
+func (s *simpleRenderService) SetContext(ctx RenderContext) {
+	s.ctx = ctx
+}
+
+func NewSimpleRenderService(target pixel.Target, bounds pixel.Rect) RenderService {
 	return &simpleRenderService{
-		ctx: &renderContextImpl{
-			win: win,
-			transform: pixel.IM,
-		},
+		ctx: NewRenderContext(target, bounds),
 	}
 }
 
+func NewRenderContext(target pixel.Target, bounds pixel.Rect) RenderContext {
+	return &renderContextImpl{
+		target:    target,
+		targetBounds: bounds,
+		transform: pixel.IM,
+	}
+}

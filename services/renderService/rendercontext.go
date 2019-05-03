@@ -2,11 +2,13 @@ package renderService
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/faiface/pixel/pixelgl"
 )
 
 type RenderContext interface {
-	GetWin() *pixelgl.Window
+	/* deprecated: use GetTarget instead */
+	GetWin() pixel.Target
+	GetTarget() pixel.Target
+	GetTargetBounds() pixel.Rect
 	GetTransform() pixel.Matrix
 	SetTransform(matrix pixel.Matrix)
 	GetViewMatrix() pixel.Matrix
@@ -14,15 +16,24 @@ type RenderContext interface {
 }
 
 type renderContextImpl struct {
-	win *pixelgl.Window
-	transform pixel.Matrix
-	viewMatrix pixel.Matrix
+	target       pixel.Target
+	targetBounds pixel.Rect
+	transform    pixel.Matrix
+	viewMatrix   pixel.Matrix
 }
 
 var _ RenderContext = &renderContextImpl{}
 
-func (ctx *renderContextImpl) GetWin() *pixelgl.Window {
-	return ctx.win
+func (ctx *renderContextImpl) GetWin() pixel.Target {
+	return ctx.target
+}
+
+func (ctx *renderContextImpl) GetTarget() pixel.Target {
+	return ctx.target
+}
+
+func (ctx *renderContextImpl) GetTargetBounds() pixel.Rect {
+	return ctx.targetBounds
 }
 
 func (ctx *renderContextImpl) GetTransform() pixel.Matrix {

@@ -16,11 +16,11 @@ type GameObject interface {
 type GameObjectBase struct {
 	components []Component
 	children   []GameObject
-	renderer   Renderer
+	renderer   Renderable
 	transform  components.Transform
 }
 
-func (g *GameObjectBase) InitBase(renderer Renderer) {
+func (g *GameObjectBase) InitBase(renderer Renderable) {
 	g.renderer = renderer
 	g.transform = components.NewTransform()
 }
@@ -59,6 +59,6 @@ func (g *GameObjectBase) GetTransform() components.Transform {
 	return g.transform
 }
 
-func (g *GameObjectBase) GetRenderer() Renderer {
+func (g *GameObjectBase) GetRenderer() Renderable {
 	return g.renderer
 }

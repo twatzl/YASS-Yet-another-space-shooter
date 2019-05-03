@@ -9,8 +9,7 @@ func (g *game) setCurrentScene(scene Scene) {
 }
 
 func (g *game) Render() {
-
-	g.currentScene.Render()
+	g.currentScene.RenderScene()
 }
 
 func (g *game) HandleInput(f float64) {

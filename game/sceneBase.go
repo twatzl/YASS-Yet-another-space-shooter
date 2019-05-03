@@ -3,7 +3,7 @@ package game
 type Scene interface {
 	AddGameObject(o GameObject)
 	GetGameObjects() []GameObject
-	Render()
+	RenderScene()
 }
 
 type SceneBase struct {
@@ -18,7 +18,7 @@ func (sb *SceneBase) GetGameObjects() []GameObject {
 	return sb.gameObjects
 }
 
-func (sb *SceneBase) Render() {
+func (sb *SceneBase) RenderScene() {
 	for _,o := range sb.GetGameObjects() {
 		o.Render()
 	}
