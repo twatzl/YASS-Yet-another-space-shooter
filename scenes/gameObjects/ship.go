@@ -14,20 +14,20 @@ type ship struct {
 	*physicsSystem.PhysicComponent
 }
 
-func (ship) Destroy() {
+func (s *ship) Destroy() {
 
 }
 
-func (ship) Disable() {
-
+func (s *ship) Disable() {
+	simulationService.Get().UnregisterGameObject(s)
 }
 
-func (ship) Enable() {
-
+func (s *ship) Enable() {
+	simulationService.Get().RegisterGameObject(s)
 }
 
-func (ship) Update() {
-
+func (s *ship) Update() {
+	s.UpdateComponents()
 }
 
 func CreateShip() *ship {
@@ -61,5 +61,6 @@ func CreateShip() *ship {
 		physicsSystem.ApplyForce(s.PhysicComponent, asdf)
 	})
 
+	s.Enable()
 	return s
 }

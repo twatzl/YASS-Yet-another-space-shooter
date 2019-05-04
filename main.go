@@ -42,6 +42,9 @@ func run() {
 		/* handle inputs */
 		inputSystem.GetControl().HandleInputs()
 
+		/* update the game logic */
+		simulationService.GetControl().UpdateGameObjects()
+
 		/* render */
 		win.Clear(bgcolor)
 

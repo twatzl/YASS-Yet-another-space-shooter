@@ -6,14 +6,17 @@ import (
 	"github.com/twatzl/pixel-test/game"
 	"github.com/twatzl/pixel-test/scenes/gameObjects"
 	"github.com/twatzl/pixel-test/services/renderService"
+	"github.com/twatzl/pixel-test/terrain"
 )
 
 type mainScene struct {
-	b game.SceneBase
-	camera1 camera.Camera
-	camera2 camera.Camera
-	c1Pos pixel.Vec
-	c2Pos pixel.Vec
+	b               game.SceneBase
+	camera1         camera.Camera
+	camera2         camera.Camera
+	c1Pos           pixel.Vec
+	c2Pos           pixel.Vec
+	terrain         terrain.Terrain
+	terrainRenderer game.Renderable
 }
 
 func (s *mainScene) GetGameObjects() []game.GameObject {
@@ -41,6 +44,7 @@ func (s *mainScene) RenderScene() {
 }
 
 func (s *mainScene) Render() {
+	s.terrainRenderer.Render()
 	s.b.RenderScene()
 }
 
@@ -55,8 +59,24 @@ func InitMainScene(targetBounds pixel.Rect) *mainScene {
 	ms.c1Pos = pixel.V(q, targetBounds.Max.Y/2)
 	ms.c2Pos = pixel.V(targetBounds.Max.X - q, targetBounds.Max.Y/2)
 
+	//ms.camera1.SetLookAt(pixel.V(50,50))
+	//ms.camera2.SetLookAt(pixel.V(-50,-50))
+
+	ms.terrain = terrain.New()
+	err := ms.terrain.LoadFromImage("maps/map01.png")
+	if err != nil {
+		println("error loading the map " + err.Error())
+		return ms
+	}
+	ms.terrainRenderer = game.CreateSpriteRenderer(ms.terrain.GetSprite())
+
+	ship := gameObjects.CreateShip()
+
 	ms.AddGameObject(gameObjects.CreateBackground())
-	ms.AddGameObject(gameObjects.CreateShip())
+	ms.AddGameObject(ship)
+
+	b := NewUpdateCameraLookAtBehavior(ms.camera1, ship.GetTransform())
+	ship.AddComponent(b)
 
 	return ms
 }

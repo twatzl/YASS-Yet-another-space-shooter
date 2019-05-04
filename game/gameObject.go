@@ -14,7 +14,7 @@ type GameObject interface {
 }
 
 type GameObjectBase struct {
-	components []Component
+	components []Behavior
 	children   []GameObject
 	renderer   Renderable
 	transform  components.Transform
@@ -27,20 +27,21 @@ func (g *GameObjectBase) InitBase(renderer Renderable) {
 
 func (g *GameObjectBase) Render() {
 	/* transform */
-	oldTransform := renderService.Get().GetContext().GetTransform()
+	renderContext := renderService.Get().GetContext()
+	oldTransform := renderContext.GetTransform()
 	ct := oldTransform.Chained(g.GetTransform().GetLocalMatrix())
-	renderService.Get().GetContext().SetTransform(ct)
+	renderContext.SetTransform(ct)
 
 	/* render */
 	g.renderer.Render()
 	g.renderChildren()
 
 	/* reset transform */
-	renderService.Get().GetContext().SetTransform(oldTransform)
+	renderContext.SetTransform(oldTransform)
 }
 
-func (g *GameObjectBase) AddBehavior(behavior Component) {
-	g.components = append(g.components, behavior)
+func (g *GameObjectBase) AddComponent(component Behavior) {
+	g.components = append(g.components, component)
 }
 
 func (g *GameObjectBase) UpdateComponents() {

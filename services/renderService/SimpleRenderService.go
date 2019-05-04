@@ -18,14 +18,6 @@ func (s *simpleRenderService) SetContext(ctx RenderContext) {
 
 func NewSimpleRenderService(target pixel.Target, bounds pixel.Rect) RenderService {
 	return &simpleRenderService{
-		ctx: NewRenderContext(target, bounds),
-	}
-}
-
-func NewRenderContext(target pixel.Target, bounds pixel.Rect) RenderContext {
-	return &renderContextImpl{
-		target:    target,
-		targetBounds: bounds,
-		transform: pixel.IM,
+		ctx: NewRenderContext("render service context", target, bounds),
 	}
 }
