@@ -1,8 +1,8 @@
 package game
 
 import (
-	"github.com/twatzl/pixel-test/components"
-	"github.com/twatzl/pixel-test/services/renderService"
+	"github.com/twatzl/pixel-test/engine/components"
+	"github.com/twatzl/pixel-test/engine/services/renderService"
 )
 
 type GameObject interface {

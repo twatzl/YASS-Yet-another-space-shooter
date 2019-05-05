@@ -2,7 +2,7 @@ package game
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/twatzl/pixel-test/services/renderService"
+	"github.com/twatzl/pixel-test/engine/services/renderService"
 )
 
 type spriteRenderer struct {

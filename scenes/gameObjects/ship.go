@@ -2,12 +2,12 @@ package gameObjects
 
 import (
 	"github.com/faiface/pixel/pixelgl"
-	"github.com/twatzl/pixel-test/game"
-	"github.com/twatzl/pixel-test/services/simulationService"
-	"github.com/twatzl/pixel-test/systems/collisionSystem"
-	"github.com/twatzl/pixel-test/systems/inputSystem"
-	"github.com/twatzl/pixel-test/systems/physicsSystem"
-	"github.com/twatzl/pixel-test/util"
+	"github.com/twatzl/pixel-test/engine/game"
+	"github.com/twatzl/pixel-test/engine/systems/simulationSystem"
+	"github.com/twatzl/pixel-test/engine/systems/collisionSystem"
+	"github.com/twatzl/pixel-test/engine/systems/inputSystem"
+	"github.com/twatzl/pixel-test/engine/systems/physicsSystem"
+	"github.com/twatzl/pixel-test/engine/util"
 )
 
 type ship struct {
@@ -21,11 +21,11 @@ func (s *ship) Destroy() {
 }
 
 func (s *ship) Disable() {
-	simulationService.Get().UnregisterGameObject(s)
+	simulationSystem.Get().UnregisterGameObject(s)
 }
 
 func (s *ship) Enable() {
-	simulationService.Get().RegisterGameObject(s)
+	simulationSystem.Get().RegisterGameObject(s)
 }
 
 func (s *ship) Update() {
@@ -40,7 +40,7 @@ func (s *ship) onCollide(other game.GameObject) {
 func CreateShip() *ship {
 	s := &ship{}
 
-	sprite := util.LoadSprite("sprites/shuttle.png")
+	sprite := util.LoadSprite("assets/sprites/shuttle.png")
 	renderer := game.CreateSpriteRenderer(sprite)
 	s.InitBase(renderer)
 	s.PhysicComponent = physicsSystem.NewPhysicComponent(200)
@@ -58,13 +58,13 @@ func CreateShip() *ship {
 	rocketWumms := 20000.0
 
 	inputSystem.Get().RegisterKeyEventHandler(inputSystem.KeyPressed, pixelgl.KeyLeft, func() {
-		deltaT := simulationService.Get().GetElapsedTime().Seconds()
+		deltaT := simulationSystem.Get().GetElapsedTime().Seconds()
 		s.GetTransform().Rotate(rotSpeed * deltaT)
 
 	})
 
 	inputSystem.Get().RegisterKeyEventHandler(inputSystem.KeyPressed, pixelgl.KeyRight, func() {
-		deltaT := simulationService.Get().GetElapsedTime().Seconds()
+		deltaT := simulationSystem.Get().GetElapsedTime().Seconds()
 		s.GetTransform().Rotate(-rotSpeed * deltaT)
 
 	})

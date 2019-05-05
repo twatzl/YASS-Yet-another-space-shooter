@@ -3,8 +3,8 @@ package camera
 import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-	"github.com/twatzl/pixel-test/game"
-	"github.com/twatzl/pixel-test/services/renderService"
+	"github.com/twatzl/pixel-test/engine/game"
+	"github.com/twatzl/pixel-test/engine/services/renderService"
 	"golang.org/x/image/colornames"
 )
 

@@ -2,10 +2,10 @@ package scenes
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/twatzl/pixel-test/camera"
-	"github.com/twatzl/pixel-test/game"
+	"github.com/twatzl/pixel-test/engine/camera"
+	"github.com/twatzl/pixel-test/engine/game"
 	"github.com/twatzl/pixel-test/scenes/gameObjects"
-	"github.com/twatzl/pixel-test/services/renderService"
+	"github.com/twatzl/pixel-test/engine/services/renderService"
 	"github.com/twatzl/pixel-test/terrain"
 )
 
@@ -63,7 +63,7 @@ func InitMainScene(targetBounds pixel.Rect) *mainScene {
 	//ms.camera2.SetLookAt(pixel.V(-50,-50))
 
 	ms.terrain = terrain.New()
-	err := ms.terrain.LoadFromImage("maps/map01.png")
+	err := ms.terrain.LoadFromImage("assets/maps/map01.png")
 	if err != nil {
 		println("error loading the map " + err.Error())
 		return ms

@@ -1,9 +1,9 @@
 package scenes
 
 import (
-	"github.com/twatzl/pixel-test/camera"
-	"github.com/twatzl/pixel-test/components"
-	"github.com/twatzl/pixel-test/game"
+	"github.com/twatzl/pixel-test/engine/camera"
+	"github.com/twatzl/pixel-test/engine/components"
+	"github.com/twatzl/pixel-test/engine/game"
 )
 
 type updateCameraLookAtBehavior struct {

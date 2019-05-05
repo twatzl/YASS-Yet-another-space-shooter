@@ -2,7 +2,7 @@ package physicsSystem
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/twatzl/pixel-test/components"
+	"github.com/twatzl/pixel-test/engine/components"
 )
 
 type PhysicsSystem interface {

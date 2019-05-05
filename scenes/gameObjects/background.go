@@ -2,8 +2,8 @@ package gameObjects
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/twatzl/pixel-test/game"
-	"github.com/twatzl/pixel-test/util"
+	"github.com/twatzl/pixel-test/engine/game"
+	"github.com/twatzl/pixel-test/engine/util"
 )
 
 type background struct {

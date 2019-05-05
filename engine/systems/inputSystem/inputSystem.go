@@ -2,7 +2,7 @@ package inputSystem
 
 import (
 	"github.com/faiface/pixel/pixelgl"
-	"github.com/twatzl/pixel-test/services/windowService"
+	"github.com/twatzl/pixel-test/engine/services/windowService"
 )
 
 type KeyEvent int

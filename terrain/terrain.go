@@ -3,8 +3,8 @@ package terrain
 import (
 	"github.com/faiface/pixel"
 	"github.com/pkg/errors"
-	"github.com/twatzl/pixel-test/systems/collisionSystem"
-	"github.com/twatzl/pixel-test/util"
+	"github.com/twatzl/pixel-test/engine/systems/collisionSystem"
+	"github.com/twatzl/pixel-test/engine/util"
 	"image"
 	"image/color"
 	"os"

@@ -2,7 +2,7 @@ package collisionSystem
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/twatzl/pixel-test/game"
+	"github.com/twatzl/pixel-test/engine/game"
 )
 
 type ColliderCenterFunc func() pixel.Vec

@@ -1,14 +1,14 @@
 package main
 
 import (
-	"github.com/twatzl/pixel-test/game"
+	"github.com/twatzl/pixel-test/engine/game"
 	"github.com/twatzl/pixel-test/scenes"
-	"github.com/twatzl/pixel-test/services/renderService"
-	"github.com/twatzl/pixel-test/services/simulationService"
-	"github.com/twatzl/pixel-test/services/windowService"
-	"github.com/twatzl/pixel-test/systems/collisionSystem"
-	"github.com/twatzl/pixel-test/systems/inputSystem"
-	"github.com/twatzl/pixel-test/systems/physicsSystem"
+	"github.com/twatzl/pixel-test/engine/services/renderService"
+	"github.com/twatzl/pixel-test/engine/systems/simulationSystem"
+	"github.com/twatzl/pixel-test/engine/services/windowService"
+	"github.com/twatzl/pixel-test/engine/systems/collisionSystem"
+	"github.com/twatzl/pixel-test/engine/systems/inputSystem"
+	"github.com/twatzl/pixel-test/engine/systems/physicsSystem"
 	_ "image/png"
 	"time"
 
@@ -35,7 +35,7 @@ func run() {
 	for !win.Closed() {
 		deltaT = time.Since(lastTime)
 		lastTime = time.Now()
-		simulationService.GetControl().SetElapsedTime(deltaT)
+		simulationSystem.GetControl().SetElapsedTime(deltaT)
 
 		/* update physics */
 		physicsSystem.GetControl().Update()
@@ -44,7 +44,7 @@ func run() {
 		inputSystem.GetControl().HandleInputs()
 
 		/* update the game logic */
-		simulationService.GetControl().UpdateGameObjects()
+		simulationSystem.GetControl().UpdateGameObjects()
 
 		/* now check for collisions */
 		collisionSystem.GetControl().Update()
@@ -76,8 +76,8 @@ func initServicesAndSystems() *pixelgl.Window {
 	inputSystem.Provide(iSystem)
 
 	/* simulation */
-	sService := simulationService.New()
-	simulationService.Provide(sService)
+	sService := simulationSystem.New()
+	simulationSystem.Provide(sService)
 
 	/* physics */
 	ps := physicsSystem.NewPhysicsSystem(physicsSystem.PhysicsConfig{
