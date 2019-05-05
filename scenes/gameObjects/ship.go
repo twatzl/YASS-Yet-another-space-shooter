@@ -4,6 +4,7 @@ import (
 	"github.com/faiface/pixel/pixelgl"
 	"github.com/twatzl/pixel-test/game"
 	"github.com/twatzl/pixel-test/services/simulationService"
+	"github.com/twatzl/pixel-test/systems/collisionSystem"
 	"github.com/twatzl/pixel-test/systems/inputSystem"
 	"github.com/twatzl/pixel-test/systems/physicsSystem"
 	"github.com/twatzl/pixel-test/util"
@@ -12,6 +13,7 @@ import (
 type ship struct {
 	game.GameObjectBase
 	*physicsSystem.PhysicComponent
+	collisionSystem.CircularCollider
 }
 
 func (s *ship) Destroy() {
@@ -30,6 +32,11 @@ func (s *ship) Update() {
 	s.UpdateComponents()
 }
 
+func (s *ship) onCollide(other game.GameObject) {
+	//TODO: sound + animation
+	println("ship colliding")
+}
+
 func CreateShip() *ship {
 	s := &ship{}
 
@@ -39,6 +46,13 @@ func CreateShip() *ship {
 	s.PhysicComponent = physicsSystem.NewPhysicComponent(200)
 
 	physicsSystem.Get().RegisterPhysicComponent(s.PhysicComponent, s.GetTransform())
+
+	s.CircularCollider = collisionSystem.NewCircularCollider(
+		s,
+		(sprite.Frame().H() + sprite.Frame().W())/4,
+		s.GetTransform().GetTranslation,
+		s.onCollide)
+	collisionSystem.Get().RegisterCircularCollider(s)
 
 	rotSpeed := 120.0
 	rocketWumms := 20000.0

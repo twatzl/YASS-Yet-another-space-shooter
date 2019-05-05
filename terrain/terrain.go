@@ -3,6 +3,7 @@ package terrain
 import (
 	"github.com/faiface/pixel"
 	"github.com/pkg/errors"
+	"github.com/twatzl/pixel-test/systems/collisionSystem"
 	"github.com/twatzl/pixel-test/util"
 	"image"
 	"image/color"
@@ -51,10 +52,32 @@ type terrainImpl struct {
 	sprite              *pixel.Sprite
 }
 
+func (t *terrainImpl) GetBoundingBox() pixel.Rect {
+	panic("implement me")
+}
+
+func (t *terrainImpl) CollidesWithPoint(x, y int) {
+	panic("implement me")
+}
+
+func (t *terrainImpl) update() {
+	panic("implement me")
+}
+
+func (t *terrainImpl) CollidesAt(x int, y int) bool {
+	return t.collisionBitmap.GetBool(x, y)
+}
+
 func New() Terrain {
 	t := &terrainImpl{}
+
+	// register terrain as collider
+	collisionSystem.Get().RegisterTerrainCollider(t)
+
 	return t
 }
+
+var _ collisionSystem.TerrainCollider = &terrainImpl{}
 
 func (t *terrainImpl) LoadFromImage(path string) error {
 	if !strings.HasSuffix(path, ".png") {

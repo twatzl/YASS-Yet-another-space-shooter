@@ -6,6 +6,7 @@ import (
 	"github.com/twatzl/pixel-test/services/renderService"
 	"github.com/twatzl/pixel-test/services/simulationService"
 	"github.com/twatzl/pixel-test/services/windowService"
+	"github.com/twatzl/pixel-test/systems/collisionSystem"
 	"github.com/twatzl/pixel-test/systems/inputSystem"
 	"github.com/twatzl/pixel-test/systems/physicsSystem"
 	_ "image/png"
@@ -45,6 +46,9 @@ func run() {
 		/* update the game logic */
 		simulationService.GetControl().UpdateGameObjects()
 
+		/* now check for collisions */
+		collisionSystem.GetControl().Update()
+
 		/* render */
 		win.Clear(bgcolor)
 
@@ -55,6 +59,7 @@ func run() {
 }
 
 func initServicesAndSystems() *pixelgl.Window {
+	/* window */
 	windowService.Get().CreateWindow(pixelgl.WindowConfig{
 		Title:  "Pixel Rocks!",
 		Bounds: pixel.R(0, 0, 1024, 768),
@@ -62,20 +67,29 @@ func initServicesAndSystems() *pixelgl.Window {
 	})
 	win := windowService.Get().GetWindow()
 
+	/* rendering */
 	rService := renderService.NewSimpleRenderService(win, win.Bounds())
 	renderService.ProvideRenderService(rService)
 
-	sService := simulationService.New()
-	simulationService.Provide(sService)
-
+	/* input */
 	iSystem := inputSystem.New()
 	inputSystem.Provide(iSystem)
 
+	/* simulation */
+	sService := simulationService.New()
+	simulationService.Provide(sService)
+
+	/* physics */
 	ps := physicsSystem.NewPhysicsSystem(physicsSystem.PhysicsConfig{
 		Gravity:          9.81,
 		GravityDirection: pixel.V(0, -1),
 	})
 	physicsSystem.Provide(ps)
+
+	/* collision system */
+	cSystem := collisionSystem.New()
+	collisionSystem.Provide(cSystem)
+
 	return win
 }
 

@@ -72,7 +72,7 @@ func InitMainScene(targetBounds pixel.Rect) *mainScene {
 
 	ship := gameObjects.CreateShip()
 
-	ms.AddGameObject(gameObjects.CreateBackground())
+	//ms.AddGameObject(gameObjects.CreateBackground())
 	ms.AddGameObject(ship)
 
 	b := NewUpdateCameraLookAtBehavior(ms.camera1, ship.GetTransform())

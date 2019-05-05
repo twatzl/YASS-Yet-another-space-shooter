@@ -42,16 +42,26 @@ func (bb *bitBoardImpl) Set(x, y, val int) {
 	bb.data[sliceIdx] = data | bm
 }
 
+// x,y in display coordinates
 func (bb *bitBoardImpl) Get(x, y int) int {
+	x = x + bb.xDim/2
+	y = y + bb.yDim/2
+
+	if x < 0 || x >= bb.xDim || y < 0 || y >= bb.yDim {
+		return 0
+	}
+
 	sliceIdx, bitOffset := bb.calculateIndex(x, y)
 	shamt := uint(bitsPerInt - bb.dataSize - bitOffset)
 	// calculate bitmask for data retrieval
 	bm := bb.bitmask << shamt
 
+	//fmt.Printf("x: %d ,y: %d ,sliceIdx: %d\n", x,y, sliceIdx)
 	data := bb.data[sliceIdx]
 	data = data & bm
 	// shift data back to LSB
 	data = data >> shamt
+
 	return data
 }
 
@@ -89,7 +99,7 @@ func NewBitBoard(dataSize, xDim, yDim int) BitBoard {
 	sliceLen := dataSize * xDim * yDim / bitsPerInt;
 	bb.data = make([]int, sliceLen, sliceLen)
 	// some nice bit shift magic ƪ(ړײ)‎ƪ​​ to initialize a base bitmask
-	bb.bitmask = ^0>>bitsPerInt - dataSize
+	bb.bitmask = ^(^0 << uint(dataSize))
 
 	return bb
 }
