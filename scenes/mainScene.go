@@ -3,6 +3,7 @@ package scenes
 import (
 	"github.com/faiface/pixel"
 	"github.com/twatzl/pixel-test/engine/camera"
+	"github.com/twatzl/pixel-test/engine/component"
 	"github.com/twatzl/pixel-test/engine/game"
 	"github.com/twatzl/pixel-test/scenes/gameObjects"
 	"github.com/twatzl/pixel-test/engine/services/renderService"
@@ -16,7 +17,7 @@ type mainScene struct {
 	c1Pos           pixel.Vec
 	c2Pos           pixel.Vec
 	terrain         terrain.Terrain
-	terrainRenderer game.Renderable
+	terrainRenderer component.RenderableComponent
 }
 
 func (s *mainScene) GetGameObjects() []game.GameObject {
@@ -48,6 +49,10 @@ func (s *mainScene) Render() {
 	s.b.RenderScene()
 }
 
+func (s *mainScene) onShipDestroyed() {
+	// post text and end game
+}
+
 func InitMainScene(targetBounds pixel.Rect) *mainScene {
 	ms := &mainScene{}
 
@@ -70,7 +75,7 @@ func InitMainScene(targetBounds pixel.Rect) *mainScene {
 	}
 	ms.terrainRenderer = game.CreateSpriteRenderer(ms.terrain.GetSprite())
 
-	ship := gameObjects.CreateShip()
+	ship := gameObjects.CreateShip(pixel.V(10, 0),ms.onShipDestroyed)
 
 	//ms.AddGameObject(gameObjects.CreateBackground())
 	ms.AddGameObject(ship)

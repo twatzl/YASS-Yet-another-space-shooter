@@ -1,8 +1,7 @@
 package game
 
 import (
-	"github.com/twatzl/pixel-test/engine/components"
-	"github.com/twatzl/pixel-test/engine/services/renderService"
+	"github.com/twatzl/pixel-test/engine/component"
 )
 
 type GameObject interface {
@@ -11,37 +10,52 @@ type GameObject interface {
 	Update()
 	Render()
 	Destroy()
+	GetTransform() component.Transform
 }
 
 type GameObjectBase struct {
-	components []Behavior
+	components []component.Component
 	children   []GameObject
-	renderer   Renderable
-	transform  components.Transform
+	transform  component.Transform
+	enabled    bool
+	//TODO: maybe also allow to remove children?
 }
 
-func (g *GameObjectBase) InitBase(renderer Renderable) {
-	g.renderer = renderer
-	g.transform = components.NewTransform()
+func (g *GameObjectBase) InitBase() {
+	g.transform = component.NewTransform()
+	g.enabled = true
 }
 
-func (g *GameObjectBase) Render() {
-	/* transform */
-	renderContext := renderService.Get().GetContext()
-	oldTransform := renderContext.GetTransform()
-	ct := oldTransform.Chained(g.GetTransform().GetLocalMatrix())
-	renderContext.SetTransform(ct)
-
-	/* render */
-	g.renderer.Render()
-	g.renderChildren()
-
-	/* reset transform */
-	renderContext.SetTransform(oldTransform)
+func (g *GameObjectBase) EnableChildren() {
+	for _, c := range g.children {
+		c.Enable()
+	}
 }
 
-func (g *GameObjectBase) AddComponent(component Behavior) {
+func (g *GameObjectBase) DisableChildren() {
+	for _, c := range g.children {
+		c.Disable()
+	}
+}
+
+func (g *GameObjectBase) EnableComponents() {
+	for _, c := range g.components {
+		c.Enable()
+	}
+}
+
+func (g *GameObjectBase) DisableComponents() {
+	for _, c := range g.components {
+		c.Disable()
+	}
+}
+
+func (g *GameObjectBase) AddComponent(component component.Component) {
 	g.components = append(g.components, component)
+}
+
+func (g *GameObjectBase) AddChild(gameObject GameObject) {
+	g.children = append(g.children, gameObject)
 }
 
 func (g *GameObjectBase) UpdateComponents() {
@@ -50,16 +64,30 @@ func (g *GameObjectBase) UpdateComponents() {
 	}
 }
 
-func (g *GameObjectBase) renderChildren() {
+func (g *GameObjectBase) UpdateChildren() {
+	for _, o := range g.children {
+		o.Update()
+	}
+}
+
+func (g *GameObjectBase) DestroyComponents() {
+	for _, b := range g.components {
+		b.Destroy()
+	}
+}
+
+func (g *GameObjectBase) DestroyChildren() {
+	for _, o := range g.children {
+		o.Destroy()
+	}
+}
+
+func (g *GameObjectBase) RenderChildren() {
 	for _, o := range g.children {
 		o.Render()
 	}
 }
 
-func (g *GameObjectBase) GetTransform() components.Transform {
+func (g *GameObjectBase) GetTransform() component.Transform {
 	return g.transform
-}
-
-func (g *GameObjectBase) GetRenderer() Renderable {
-	return g.renderer
 }

@@ -2,8 +2,8 @@ package physicsSystem
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/twatzl/pixel-test/engine/components"
-	"github.com/twatzl/pixel-test/engine/systems/simulationSystem"
+	"github.com/twatzl/pixel-test/engine/component"
+	"github.com/twatzl/pixel-test/engine/services/timeService"
 )
 
 type physicSystemImpl struct {
@@ -13,7 +13,7 @@ type physicSystemImpl struct {
 
 type physicTransformPair struct {
 	physic    *PhysicComponent
-	transform components.Transform
+	transform component.Transform
 }
 
 func NewPhysicsSystem(config PhysicsConfig) PhysicsSystemControl {
@@ -23,7 +23,7 @@ func NewPhysicsSystem(config PhysicsConfig) PhysicsSystemControl {
 	}
 }
 
-func (ps *physicSystemImpl) RegisterPhysicComponent(c *PhysicComponent, t components.Transform) {
+func (ps *physicSystemImpl) RegisterPhysicComponent(c *PhysicComponent, t component.Transform) {
 	ps.physicComponents = append(ps.physicComponents, physicTransformPair{
 		physic:    c,
 		transform: t,
@@ -31,7 +31,7 @@ func (ps *physicSystemImpl) RegisterPhysicComponent(c *PhysicComponent, t compon
 }
 
 func (ps *physicSystemImpl) Update() {
-	deltaT := simulationSystem.Get().GetElapsedTime().Seconds()
+	deltaT := timeService.Get().GetDeltaTime().Seconds()
 	for _, c := range ps.physicComponents {
 		ps.handleGravity(deltaT, c.physic)
 		ps.updateMovement(deltaT, c)
@@ -56,7 +56,7 @@ func ApplyForce(c *PhysicComponent, force pixel.Vec) {
 		return;
 	}
 
-	deltaT := simulationSystem.Get().GetElapsedTime().Seconds()
+	deltaT := timeService.Get().GetDeltaTime().Seconds()
 	/* speed += F/m * deltaT */
 	acc := force.Scaled(1 / c.mass)
 	deltaV := acc.Scaled(deltaT)

@@ -28,6 +28,9 @@ func (cs *colliderSystemImpl) Update() {
 	/* check collisions of objects with terrain */
 	tc := cs.terrainCollider
 	for _, cc := range cs.circularColliders {
+		if !cc.IsEnabled() {
+			continue;
+		}
 		if checkCollisionCircTerrain(tc, cc) {
 			cc.callCollisionCallback(nil)
 		}
@@ -43,7 +46,7 @@ func (cs *colliderSystemImpl) Update() {
 		for j := i + 1; j < len(circularColliders); j++ {
 			cc1 := circularColliders[i]
 			cc2 := circularColliders[j]
-			if checkCollisionCircCirc(cc1, cc2) {
+			if cc1.IsEnabled() && cc2.IsEnabled() && checkCollisionCircCirc(cc1, cc2) {
 				cc1.callCollisionCallback(cc2.getGameObject())
 				cc2.callCollisionCallback(cc1.getGameObject())
 			}
@@ -58,7 +61,7 @@ func checkCollisionCircCirc(c1, c2 CircularCollider) bool {
 	r2 := c2.GetRadius()
 
 	dist := center1.Sub(center2).Len()
-	return dist < r1 + r2
+	return dist < r1+r2
 }
 
 func checkCollisionCircTerrain(tc TerrainCollider, cc CircularCollider) bool {
@@ -70,7 +73,7 @@ func checkCollisionCircTerrain(tc TerrainCollider, cc CircularCollider) bool {
 	cy := int(center.Y)
 
 	for i := -radius; i <= radius; i++ {
-		if tc.CollidesAt(i + cx, cy) || tc.CollidesAt(cx, i + cy) {
+		if tc.CollidesAt(i+cx, cy) || tc.CollidesAt(cx, i+cy) {
 			return true
 		}
 	}

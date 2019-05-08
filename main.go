@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/twatzl/pixel-test/engine/game"
+	"github.com/twatzl/pixel-test/engine/services/timeService"
 	"github.com/twatzl/pixel-test/scenes"
 	"github.com/twatzl/pixel-test/engine/services/renderService"
 	"github.com/twatzl/pixel-test/engine/systems/simulationSystem"
@@ -32,10 +33,12 @@ func run() {
 	lastTime := time.Now()
 	deltaT := time.Since(lastTime)
 
+	timeService.GetControl().StartNow()
+
 	for !win.Closed() {
 		deltaT = time.Since(lastTime)
 		lastTime = time.Now()
-		simulationSystem.GetControl().SetElapsedTime(deltaT)
+		timeService.GetControl().SetDeltaTime(deltaT)
 
 		/* update physics */
 		physicsSystem.GetControl().Update()
@@ -59,6 +62,10 @@ func run() {
 }
 
 func initServicesAndSystems() *pixelgl.Window {
+	/* timeService */
+	ts := timeService.New()
+	timeService.Provide(ts)
+
 	/* window */
 	windowService.Get().CreateWindow(pixelgl.WindowConfig{
 		Title:  "Pixel Rocks!",

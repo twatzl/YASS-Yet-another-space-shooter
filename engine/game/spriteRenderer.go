@@ -6,32 +6,29 @@ import (
 )
 
 type spriteRenderer struct {
-	sprite *pixel.Sprite
-}
-
-func (r *spriteRenderer) Create() {
-	panic("implement me")
-}
-
-func (r *spriteRenderer) Update() {
-	panic("implement me")
+	enabled         bool
+	sprite          *pixel.Sprite
+	spriteTransform pixel.Matrix
 }
 
 func (r *spriteRenderer) Enable() {
-	panic("implement me")
+	r.enabled = true
 }
 
 func (r *spriteRenderer) Disable() {
-	panic("implement me")
+	r.enabled = false
 }
 
 func (r *spriteRenderer) Destroy() {
-	panic("implement me")
+	r.Disable()
+	r.sprite = nil
 }
 
 func CreateSpriteRenderer(sprite *pixel.Sprite) *spriteRenderer {
 	sr := &spriteRenderer{}
 	sr.SetSprite(sprite)
+	sr.spriteTransform = pixel.IM.Moved(sr.sprite.Picture().Bounds().Max.Scaled(0.5))
+	sr.Enable()
 	return sr
 }
 
@@ -40,6 +37,9 @@ func (r *spriteRenderer) SetSprite(sprite *pixel.Sprite) {
 }
 
 func (r *spriteRenderer) Render() {
+	if !r.enabled {
+		return
+	}
 	context := renderService.Get().GetContext()
 	transform := context.GetTransform()
 	view := context.GetViewMatrix()

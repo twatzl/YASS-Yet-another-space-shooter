@@ -4,6 +4,7 @@ import (
 	"github.com/faiface/pixel"
 	"image"
 	_ "image/jpeg"
+	_ "golang.org/x/image/bmp"
 	"math"
 	"os"
 )

@@ -2,6 +2,7 @@ package collisionSystem
 
 import (
 	"github.com/faiface/pixel"
+	"github.com/twatzl/pixel-test/engine/component"
 	"github.com/twatzl/pixel-test/engine/game"
 )
 
@@ -9,6 +10,8 @@ type ColliderCenterFunc func() pixel.Vec
 type CollisionCallback func(other game.GameObject)
 
 type Collider interface {
+	component.Component
+	IsEnabled() bool
 }
 
 type CircularCollider interface {
@@ -25,6 +28,7 @@ type TerrainCollider interface {
 }
 
 type circularCollider struct {
+	enabled bool
 	gameObject  game.GameObject
 	radius      float64
 	getCenter   ColliderCenterFunc
@@ -37,11 +41,33 @@ func NewCircularCollider(gameObject game.GameObject,
 	getCenter ColliderCenterFunc,
 	onCollide CollisionCallback) CircularCollider {
 	return &circularCollider{
+		enabled: true,
 		gameObject: gameObject,
 		radius:    radius,
 		getCenter: getCenter,
 		onCollide: onCollide,
 	}
+}
+
+func (cc *circularCollider) Init() {
+}
+
+func (cc *circularCollider) Update() {
+}
+
+func (cc *circularCollider) Enable() {
+	cc.enabled = true
+}
+
+func (cc *circularCollider) Disable() {
+	cc.enabled = false
+}
+
+func (cc* circularCollider) IsEnabled() bool {
+	return cc.enabled
+}
+
+func (cc *circularCollider) Destroy() {
 }
 
 func (cc *circularCollider) GetRadius() float64 {

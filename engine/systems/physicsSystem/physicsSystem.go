@@ -2,11 +2,11 @@ package physicsSystem
 
 import (
 	"github.com/faiface/pixel"
-	"github.com/twatzl/pixel-test/engine/components"
+	"github.com/twatzl/pixel-test/engine/component"
 )
 
 type PhysicsSystem interface {
-	RegisterPhysicComponent(c *PhysicComponent, t components.Transform)
+	RegisterPhysicComponent(c *PhysicComponent, t component.Transform)
 }
 
 /**

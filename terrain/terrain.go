@@ -27,7 +27,7 @@ var terrainMaterials = []*TerrainMaterial{
 	{
 		name:      "impenetrable stone",
 		color:     color.RGBA{127, 127, 127, 255},
-		hardness:  10000000000,
+		hardness:  100000000,
 		collision: true,
 	},
 	{
@@ -52,16 +52,33 @@ type terrainImpl struct {
 	sprite              *pixel.Sprite
 }
 
+func (t *terrainImpl) Init() {
+}
+
+func (t *terrainImpl) Update() {
+}
+
+func (t *terrainImpl) Enable() {
+}
+
+func (t *terrainImpl) Disable() {
+}
+
+func (t *terrainImpl) Destroy() {
+}
+
 func (t *terrainImpl) GetBoundingBox() pixel.Rect {
-	panic("implement me")
+	return pixel.R(0,0,0,0)
 }
 
 func (t *terrainImpl) CollidesWithPoint(x, y int) {
-	panic("implement me")
 }
 
 func (t *terrainImpl) update() {
-	panic("implement me")
+}
+
+func (t *terrainImpl) IsEnabled() bool {
+	return true;
 }
 
 func (t *terrainImpl) CollidesAt(x int, y int) bool {

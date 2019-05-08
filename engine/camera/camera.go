@@ -3,7 +3,7 @@ package camera
 import (
 	"github.com/faiface/pixel"
 	"github.com/faiface/pixel/pixelgl"
-	"github.com/twatzl/pixel-test/engine/game"
+	"github.com/twatzl/pixel-test/engine/component"
 	"github.com/twatzl/pixel-test/engine/services/renderService"
 	"golang.org/x/image/colornames"
 )
@@ -11,7 +11,7 @@ import (
 type Camera interface {
 	SetBounds(bounds pixel.Rect)
 	SetLookAt(pos pixel.Vec)
-	RenderImage(renderable game.Renderable)
+	RenderImage(renderable component.RenderableComponent)
 	GetRenderedImage() pixel.Picture
 }
 
@@ -33,7 +33,7 @@ func (c *cameraImpl) SetLookAt(pos pixel.Vec) {
 	c.lookAt = pos
 }
 
-func (c *cameraImpl) RenderImage(renderable game.Renderable) {
+func (c *cameraImpl) RenderImage(renderable component.RenderableComponent) {
 	c.canvas.Clear(colornames.Black)
 	lookAtMat := lookAt(c.bounds, c.lookAt, 0)
 	c.ctx.SetViewMatrix(lookAtMat)
